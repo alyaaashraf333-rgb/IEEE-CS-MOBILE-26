@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+
+class DoneScreen extends StatelessWidget {
+  final List<Map> tasks;
+  final Function({required int id}) onDelete;
+
+  const DoneScreen({
+    Key? key,
+    required this.tasks,
+    required this.onDelete,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (tasks.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.done_outline,
+              size: 100,
+              color: Colors.grey[400],
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'No completed tasks',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey[600],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(10),
+      itemCount: tasks.length,
+      itemBuilder: (context, index) {
+        final task = tasks[index];
+
+        return Card(
+          margin: const EdgeInsets.only(bottom: 10),
+          child: ListTile(
+            title: Text(
+              task['title'] ?? '',
+              style: const TextStyle(decoration: TextDecoration.lineThrough),
+            ),
+            subtitle: Text('${task['time']} - ${task['date']}'),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: () => onDelete(id: task['id']),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
